@@ -30,19 +30,6 @@ jelajah-tata-surya/
 ├── script.js     # Animasi, interaksi, dan data planet
 └── README.md
 
-🚀 Cara Menjalankan
-Opsi 1: Langsung buka
-Download atau clone repository ini.
-Buka file index.html di browser (Chrome, Firefox, Edge, atau Safari).
-
-Opsi 2: Clone dengan Git
-bash
-git clone https://github.com/USERNAME/jelajah-tata-surya.git
-cd jelajah-tata-surya
-Lalu buka index.html di browser.
-
-Opsi 3: GitHub Pages Buka link demo di bagian atas README ini.
-
 🎮 Cara Menggunakan
 Perhatikan planet-planet yang bergerak mengelilingi Matahari.
 Klik planet untuk melihat kartu informasinya.
