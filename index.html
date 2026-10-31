@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🪐 Tata Surya Kita!</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header Aplikasi -->
+  <header class="app-header">
+    <h1>🌟 Tata Surya Kita! 🌟</h1>
+    <p class="subtitle">Klik planet untuk belajar tentang mereka!</p>
+  </header>
+
+  <!-- Area Canvas Utama -->
+  <main class="canvas-wrapper" aria-label="Simulasi tata surya interaktif">
+    <canvas id="solarCanvas" role="img" aria-label="Animasi planet-planet mengorbit matahari"></canvas>
+  </main>
+
+  <!-- Panel Kontrol -->
+  <section class="controls" aria-label="Kontrol animasi">
+    <button id="btnPlayPause" class="btn-control" aria-label="Play atau Pause animasi" title="Play / Pause">
+      <span class="btn-icon">⏸️</span>
+      <span class="btn-label">Pause</span>
+    </button>
+
+    <div class="speed-control">
+      <label for="speedSlider" class="speed-label">
+        <span>🐢</span>
+        <span>Kecepatan</span>
+        <span>🐇</span>
+      </label>
+      <input
+        type="range"
+        id="speedSlider"
+        min="0.1"
+        max="3"
+        step="0.1"
+        value="1"
+        aria-label="Atur kecepatan orbit planet"
+      />
+    </div>
+
+    <button id="btnReset" class="btn-control" aria-label="Reset posisi planet" title="Reset">
+      <span class="btn-icon">🔄</span>
+      <span class="btn-label">Reset</span>
+    </button>
+  </section>
+
+  <!-- Kartu Informasi Planet (muncul saat diklik) -->
+  <aside id="infoCard" class="info-card hidden" role="dialog" aria-modal="true" aria-label="Informasi planet">
+    <button id="closeCard" class="close-btn" aria-label="Tutup kartu informasi">✕</button>
+    <div class="info-planet-icon" id="infoPlanetIcon"></div>
+    <h2 id="infoName" class="info-name"></h2>
+    <ul class="info-list">
+      <li>
+        <span class="info-icon">📏</span>
+        <span id="infoSize" class="info-text"></span>
+      </li>
+      <li>
+        <span class="info-icon">✨</span>
+        <span id="infoFact" class="info-text"></span>
+      </li>
+      <li>
+        <span class="info-icon">📍</span>
+        <span id="infoDistance" class="info-text"></span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Overlay gelap saat kartu info terbuka -->
+  <div id="overlay" class="overlay hidden" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

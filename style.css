@@ -1,0 +1,427 @@
+/* =========================================
+   TATA SURYA KITA! — style.css
+   Palet cerah, font besar, responsif
+   ========================================= */
+
+/* --- Custom Properties (Variabel Warna & Font) --- */
+:root {
+  --clr-bg:         #0a0a1a;       /* Latar belakang luar angkasa */
+  --clr-surface:    #12122a;       /* Permukaan panel */
+  --clr-border:     #2e2e5e;       /* Garis batas */
+  --clr-text:       #f0f0ff;       /* Teks utama */
+  --clr-muted:      #9090bb;       /* Teks sekunder */
+  --clr-accent:     #ffe94e;       /* Kuning bintang */
+  --clr-accent2:    #ff7bac;       /* Pink ceria */
+  --clr-btn:        #5b6af7;       /* Biru tombol */
+  --clr-btn-hover:  #7b89ff;       /* Biru tombol hover */
+
+  --radius-card:    20px;
+  --radius-btn:     14px;
+
+  --font-main:      'Segoe UI', 'Nunito', Arial, sans-serif;
+  --font-size-base: 15px;
+
+  --shadow-card:    0 8px 32px rgba(0,0,0,0.6);
+  --transition:     0.2s ease;
+}
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--clr-bg);
+  color: var(--clr-text);
+  font-family: var(--font-main);
+  /* Full screen: isi seluruh viewport tanpa scroll */
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "canvas";
+}
+
+/* --- Header --- */
+.app-header {
+  grid-area: header;
+  text-align: center;
+  padding: 10px 16px 6px;
+  width: 100%;
+  /* Latar transparan agar bintang canvas terlihat tembus jika ada gap */
+  z-index: 10;
+}
+
+.app-header h1 {
+  font-size: clamp(1.1rem, 3.5vw, 1.9rem);
+  font-weight: 800;
+  color: var(--clr-accent);
+  text-shadow: 0 0 18px rgba(255, 233, 78, 0.55);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin-top: 2px;
+  font-size: clamp(0.75rem, 2vw, 0.95rem);
+  color: var(--clr-accent2);
+  font-weight: 600;
+}
+
+/* --- Canvas Wrapper: mengisi sisa tinggi viewport --- */
+.canvas-wrapper {
+  grid-area: canvas;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+canvas#solarCanvas {
+  display: block;
+  /* JS mengatur width/height secara langsung via style */
+  cursor: pointer;
+  /* Tanpa border-radius agar benar-benar full area */
+  border-radius: 0;
+}
+
+/* --- Kontrol: mengambang di atas canvas, bawah tengah --- */
+.controls {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  padding: 10px 18px;
+  background: rgba(18, 18, 42, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid var(--clr-border);
+  border-radius: 50px;         /* Pil membulat */
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+
+/* Tombol kontrol (Play/Pause, Reset) */
+.btn-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: var(--clr-btn);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-main);
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  /* Ukuran minimum agar nyaman di layar sentuh */
+  min-width: 110px;
+  min-height: 50px;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.btn-control:hover,
+.btn-control:focus-visible {
+  background: var(--clr-btn-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(91, 106, 247, 0.45);
+  outline: none;
+}
+
+.btn-control:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.btn-label {
+  font-size: 1rem;
+}
+
+/* Kontrol Kecepatan */
+.speed-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 160px;
+  max-width: 280px;
+}
+
+.speed-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--clr-muted);
+}
+
+/* Slider kecepatan */
+input[type="range"]#speedSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 8px;
+  background: var(--clr-border);
+  outline: none;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+input[type="range"]#speedSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--clr-accent);
+  cursor: pointer;
+  border: 3px solid var(--clr-bg);
+  box-shadow: 0 0 8px rgba(255, 233, 78, 0.6);
+  transition: transform var(--transition);
+}
+
+input[type="range"]#speedSlider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+input[type="range"]#speedSlider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--clr-accent);
+  cursor: pointer;
+  border: 3px solid var(--clr-bg);
+  box-shadow: 0 0 8px rgba(255, 233, 78, 0.6);
+}
+
+/* --- Overlay Gelap --- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 10, 0.75);
+  z-index: 100;
+  transition: opacity var(--transition);
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+/* --- Kartu Informasi Planet --- */
+.info-card {
+  position: fixed;
+  /* Tengah layar */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 200;
+
+  background: linear-gradient(160deg, #1a1a40 0%, #12122a 100%);
+  border: 2.5px solid var(--clr-border);
+  border-radius: var(--radius-card);
+  padding: 28px 28px 24px;
+  width: min(90vw, 360px);
+  box-shadow: var(--shadow-card);
+
+  /* Animasi masuk */
+  animation: cardPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes cardPop {
+  from { transform: translate(-50%, -50%) scale(0.75); opacity: 0; }
+  to   { transform: translate(-50%, -50%) scale(1);    opacity: 1; }
+}
+
+.info-card.hidden {
+  display: none;
+}
+
+/* Tombol tutup */
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: var(--clr-border);
+  color: var(--clr-text);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), transform var(--transition);
+  touch-action: manipulation;
+}
+
+.close-btn:hover,
+.close-btn:focus-visible {
+  background: var(--clr-accent2);
+  transform: rotate(90deg);
+  outline: none;
+}
+
+/* Icon planet besar di kartu */
+.info-planet-icon {
+  font-size: 4rem;
+  text-align: center;
+  margin-bottom: 6px;
+  /* Animasi goyang kecil */
+  animation: wobble 0.5s ease;
+}
+
+@keyframes wobble {
+  0%   { transform: rotate(0deg)   scale(1); }
+  20%  { transform: rotate(-12deg) scale(1.1); }
+  40%  { transform: rotate(10deg)  scale(1.1); }
+  60%  { transform: rotate(-6deg)  scale(1.05); }
+  80%  { transform: rotate(4deg)   scale(1.02); }
+  100% { transform: rotate(0deg)   scale(1); }
+}
+
+/* Nama planet */
+.info-name {
+  font-size: 1.7rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--clr-accent);
+  margin-bottom: 16px;
+  text-shadow: 0 0 10px rgba(255, 233, 78, 0.35);
+}
+
+/* Daftar fakta */
+.info-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--clr-border);
+}
+
+.info-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.info-text {
+  font-size: 0.97rem;
+  line-height: 1.5;
+  color: var(--clr-text);
+}
+
+/* --- Animasi Goyang Planet Saat Diklik (class sementara) --- */
+.planet-jiggle {
+  /* Diterapkan via JS ke canvas — animasi goyang dilakukan di dalam canvas */
+}
+
+/* --- Responsif: Tablet --- */
+@media (max-width: 768px) {
+  .controls {
+    gap: 8px;
+    padding: 8px 14px;
+    bottom: 12px;
+  }
+
+  .btn-control {
+    padding: 9px 14px;
+    min-width: 80px;
+    font-size: 0.88rem;
+    min-height: 44px;
+  }
+
+  .btn-label {
+    font-size: 0.88rem;
+  }
+
+  .speed-control {
+    min-width: 120px;
+  }
+}
+
+/* --- Responsif: HP Kecil --- */
+@media (max-width: 420px) {
+  .app-header {
+    padding: 8px 12px 4px;
+  }
+
+  .app-header h1 {
+    font-size: 1rem;
+  }
+
+  .subtitle {
+    font-size: 0.72rem;
+  }
+
+  .controls {
+    gap: 6px;
+    padding: 7px 10px;
+    bottom: 8px;
+  }
+
+  .btn-control {
+    min-width: 64px;
+    padding: 8px 10px;
+    font-size: 0.82rem;
+    min-height: 40px;
+  }
+
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+
+  .info-card {
+    padding: 22px 18px 18px;
+  }
+
+  .info-name {
+    font-size: 1.4rem;
+  }
+}
+
+/* --- Aksesibilitas: Fokus Keyboard yang Jelas --- */
+:focus-visible {
+  outline: 3px solid var(--clr-accent);
+  outline-offset: 3px;
+}
